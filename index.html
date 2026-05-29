@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JU ENT Studio | Casual Puzzle Games</title>
+  <meta name="description" content="JU ENT Studio creates colorful, minimal, and fun casual puzzle games for mobile players." />
+  <meta name="theme-color" content="#090B1D" />
+  <meta property="og:title" content="JU ENT Studio | Casual Puzzle Games" />
+  <meta property="og:description" content="Play Block Merge Puzzle and Cozy Color Ropes from JU ENT Studio." />
+  <meta property="og:image" content="assets/ju-ent-playstore-header-4096x2304.webp" />
+  <meta name="google-site-verification" content="VRAA948IsQsHKDYQYd8GqxclozpPqC5oxfyts0H5OXo" />
+  <link rel="icon" href="assets/ju-ent-logo.png" />
+  <style>
+    :root {
+      --bg: #090b1d;
+      --bg-soft: #101632;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-strong: rgba(255, 255, 255, 0.12);
+      --text: #ffffff;
+      --muted: rgba(255, 255, 255, 0.72);
+      --muted-2: rgba(255, 255, 255, 0.54);
+      --line: rgba(255, 255, 255, 0.14);
+      --cyan: #34d7ff;
+      --pink: #ff5dab;
+      --yellow: #ffd33d;
+      --green: #8ee84f;
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(52, 215, 255, 0.24), transparent 30%),
+        radial-gradient(circle at 85% 18%, rgba(255, 93, 171, 0.22), transparent 28%),
+        radial-gradient(circle at 50% 85%, rgba(255, 211, 61, 0.12), transparent 32%),
+        var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.72), transparent 80%);
+      pointer-events: none;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    img { max-width: 100%; display: block; }
+
+    .site-header {
+      position: fixed;
+      inset: 16px 0 auto;
+      z-index: 40;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+
+    .nav {
+      max-width: var(--max);
+      margin: 0 auto;
+      pointer-events: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      background: rgba(9, 11, 29, 0.72);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 50px rgba(0,0,0,0.24);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: max-content;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      object-fit: cover;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.28);
+    }
+
+    .brand span {
+      font-size: 15px;
+      letter-spacing: -0.02em;
+      font-weight: 800;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .nav-links a {
+      padding: 10px 13px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 650;
+      border-radius: 999px;
+      transition: 180ms ease;
+      white-space: nowrap;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--text);
+      background: rgba(255,255,255,0.1);
+      outline: none;
+    }
+
+    .nav-cta {
+      padding: 11px 16px;
+      border-radius: 999px;
+      color: #081025;
+      font-size: 14px;
+      font-weight: 850;
+      background: linear-gradient(135deg, var(--yellow), #ff8f2d 48%, var(--pink));
+      box-shadow: 0 10px 30px rgba(255, 146, 59, 0.26);
+      white-space: nowrap;
+    }
+
+    .menu-toggle { display: none; }
+
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 132px 20px 76px;
+      isolation: isolate;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(90deg, rgba(9,11,29,0.98) 0%, rgba(9,11,29,0.8) 40%, rgba(9,11,29,0.42) 100%),
+        url("assets/ju-ent-hero-1920.webp") center / cover no-repeat;
+      opacity: 0.92;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 220px;
+      z-index: -1;
+      background: linear-gradient(to bottom, transparent, var(--bg));
+    }
+
+    .hero-inner {
+      width: min(var(--max), 100%);
+      display: grid;
+      grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
+      gap: 44px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.16);
+      border-radius: 999px;
+      color: rgba(255,255,255,0.86);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+    }
+
+    h1 {
+      margin: 22px 0 18px;
+      max-width: 780px;
+      font-size: clamp(48px, 8vw, 96px);
+      line-height: 0.95;
+      letter-spacing: -0.075em;
+      font-weight: 950;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff, #c8f6ff 28%, #ffd33d 54%, #ff77b7 82%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero-copy {
+      max-width: 650px;
+      margin: 0 0 30px;
+      color: var(--muted);
+      font-size: clamp(17px, 2.3vw, 22px);
+      line-height: 1.58;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 13px;
+      align-items: center;
+      margin-bottom: 34px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 0 20px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 850;
+      border: 1px solid rgba(255,255,255,0.14);
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+
+    .button-primary {
+      color: #081025;
+      border-color: transparent;
+      background: linear-gradient(135deg, var(--cyan), #75f0ff 34%, var(--yellow));
+      box-shadow: 0 18px 44px rgba(52, 215, 255, 0.23);
+    }
+
+    .button-secondary {
+      color: var(--text);
+      background: rgba(255,255,255,0.09);
+      backdrop-filter: blur(14px);
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 560px;
+    }
+
+    .mini-stat {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.075);
+      backdrop-filter: blur(16px);
+    }
+
+    .mini-stat strong {
+      display: block;
+      font-size: 22px;
+      letter-spacing: -0.04em;
+    }
+
+    .mini-stat span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted-2);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .hero-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: var(--radius-xl);
+      border: 1px solid rgba(255,255,255,0.18);
+      background: linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.06));
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .hero-card-overlay {
+      position: absolute;
+      inset: auto 16px 16px;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(7, 9, 26, 0.58);
+      border: 1px solid rgba(255,255,255,0.16);
+      backdrop-filter: blur(16px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .hero-card-overlay strong {
+      display: block;
+      font-size: 15px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-card-overlay span {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .section {
+      padding: 96px 20px;
+    }
+
+    .container {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(280px, 0.72fr);
+      gap: 30px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+
+    .kicker {
+      display: inline-flex;
+      margin-bottom: 12px;
+      color: var(--cyan);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      font-weight: 950;
+    }
+
+    .section-desc {
+      margin: 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .game-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--card);
+      box-shadow: 0 18px 54px rgba(0,0,0,0.18);
+    }
+
+    .game-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 18% 12%, var(--accent), transparent 34%);
+      opacity: 0.24;
+      pointer-events: none;
+    }
+
+    .game-card.blue { --accent: #28c6ff; }
+    .game-card.pink { --accent: #ff61b7; }
+
+    .game-top {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 26px;
+    }
+
+    .app-icon {
+      width: 86px;
+      height: 86px;
+      border-radius: 22px;
+      object-fit: cover;
+      box-shadow: 0 16px 34px rgba(0,0,0,0.34);
+    }
+
+    .game-top h3 {
+      margin: 0;
+      font-size: clamp(25px, 3vw, 34px);
+      line-height: 1.08;
+      letter-spacing: -0.05em;
+    }
+
+    .game-top p {
+      margin: 7px 0 0;
+      color: var(--muted-2);
+      font-size: 14px;
+    }
+
+    .game-card .art {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 26px;
+      background: rgba(0,0,0,0.22);
+      aspect-ratio: 16 / 9;
+      margin-bottom: 24px;
+    }
+
+    .game-card .art img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+      opacity: 0.95;
+    }
+
+    .game-copy {
+      position: relative;
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .game-actions {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .pill {
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.06);
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .showcase {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 38px;
+      background: rgba(255,255,255,0.06);
+      box-shadow: var(--shadow);
+    }
+
+    .showcase img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .showcase-caption {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 22px;
+      border-top: 1px solid var(--line);
+    }
+
+    .showcase-caption p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .about-card {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(260px, 0.45fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .panel {
+      padding: 32px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(255,255,255,0.1), rgba(255,255,255,0.055));
+      box-shadow: 0 18px 54px rgba(0,0,0,0.16);
+    }
+
+    .panel p {
+      margin: 18px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .contact-stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .contact-item {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid var(--line);
+    }
+
+    .contact-item span {
+      display: block;
+      color: var(--muted-2);
+      font-size: 13px;
+      margin-bottom: 7px;
+    }
+
+    .contact-item strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .site-footer {
+      padding: 42px 20px;
+      border-top: 1px solid var(--line);
+      background: rgba(0,0,0,0.18);
+    }
+
+    .footer-inner {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+    }
+
+    .footer-brand img {
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      object-fit: cover;
+    }
+
+    .footer-brand strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      padding: 9px 11px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .footer-links a:hover { color: var(--text); background: rgba(255,255,255,0.08); }
+
+    @media (max-width: 980px) {
+      .nav { border-radius: 28px; align-items: flex-start; }
+      .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 42px;
+        height: 42px;
+        border: 0;
+        border-radius: 14px;
+        color: var(--text);
+        background: rgba(255,255,255,0.1);
+        cursor: pointer;
+      }
+      .nav-links,
+      .nav-cta { display: none; }
+      .nav[data-open="true"] { align-items: stretch; border-radius: 28px; flex-wrap: wrap; }
+      .nav[data-open="true"] .brand { flex: 1; }
+      .nav[data-open="true"] .nav-links {
+        order: 3;
+        display: grid;
+        grid-template-columns: 1fr;
+        width: 100%;
+        margin-top: 8px;
+      }
+      .nav[data-open="true"] .nav-links a { text-align: left; }
+      .hero-inner,
+      .section-head,
+      .about-card { grid-template-columns: 1fr; }
+      .hero-card { max-width: 720px; }
+      .mini-stats { grid-template-columns: 1fr; }
+      .games-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .footer-links { justify-content: flex-start; }
+      .showcase-caption { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (max-width: 560px) {
+      .site-header { inset: 10px 0 auto; padding: 0 10px; }
+      .hero { padding: 118px 16px 62px; }
+      .section { padding: 74px 16px; }
+      .hero-actions { align-items: stretch; }
+      .button { width: 100%; }
+      .game-card, .panel { padding: 20px; border-radius: 26px; }
+      .game-top { align-items: flex-start; }
+      .app-icon { width: 72px; height: 72px; border-radius: 18px; }
+      .showcase { border-radius: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" id="nav" aria-label="Main navigation">
+      <a class="brand" href="#home" aria-label="JU ENT Studio home">
+        <img class="brand-logo" src="assets/ju-ent-logo-512.webp" alt="JU ENT Studio logo" />
+        <span>JU ENT Studio</span>
+      </a>
+
+      <div class="nav-links" aria-label="Primary links">
+        <a href="#home">Home</a>
+        <a href="https://play.google.com/store/apps/dev?id=6657733121178173910" target="_blank" rel="noopener">Visit Store</a>
+        <a href="https://play.google.com/store/apps/details?id=com.juent.blockmergepuzzle" target="_blank" rel="noopener">Block Merge Puzzle</a>
+        <a href="https://play.google.com/store/apps/details?id=com.juent.cozycolorropes" target="_blank" rel="noopener">Cozy Color Ropes</a>
+      </div>
+
+      <a class="nav-cta" href="https://play.google.com/store/apps/dev?id=6657733121178173910" target="_blank" rel="noopener">Play Store</a>
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-controls="nav" aria-expanded="false">☰</button>
+    </nav>
+  </header>
+
+  <main id="home">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-inner">
+        <div>
+          <div class="eyebrow"><span class="dot" aria-hidden="true"></span> Casual mobile game studio</div>
+          <h1 id="hero-title">Playful puzzle games by <span class="gradient-text">JU ENT Studio</span></h1>
+          <p class="hero-copy">We build bright, relaxing, and satisfying casual puzzle games made for quick sessions, clean visuals, and simple fun.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://play.google.com/store/apps/dev?id=6657733121178173910" target="_blank" rel="noopener">Visit our Play Store</a>
+            <a class="button button-secondary" href="#games">Explore games</a>
+          </div>
+          <div class="mini-stats" aria-label="Studio highlights">
+            <div class="mini-stat"><strong>2</strong><span>Published casual puzzle games</span></div>
+            <div class="mini-stat"><strong>Fun</strong><span>Colorful and easy to start</span></div>
+            <div class="mini-stat"><strong>Mobile</strong><span>Designed for Android players</span></div>
+          </div>
+        </div>
+
+        <div class="hero-card" aria-label="JU ENT Studio game showcase banner">
+          <img src="assets/ju-ent-hero-1920.webp" alt="JU ENT Studio promotional artwork featuring Block Merge Puzzle and Cozy Color Ropes" />
+          <div class="hero-card-overlay">
+            <div>
+              <strong>Now on Google Play</strong>
+              <span>Block Merge Puzzle and Cozy Color Ropes</span>
+            </div>
+            <a class="button button-secondary" href="https://play.google.com/store/apps/dev?id=6657733121178173910" target="_blank" rel="noopener">Open</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="games" aria-labelledby="games-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="kicker">Our games</span>
+            <h2 id="games-title">Simple to start. Satisfying to play.</h2>
+          </div>
+          <p class="section-desc">Each game is designed with a clear core loop, polished visual feedback, and a casual-friendly experience that players can enjoy anytime.</p>
+        </div>
+
+        <div class="games-grid">
+          <article class="game-card blue">
+            <div class="game-top">
+              <img class="app-icon" src="assets/block-merge-puzzle-icon.png" alt="Block Merge Puzzle app icon" />
+              <div>
+                <h3>Block Merge Puzzle</h3>
+                <p>Colorful block puzzle gameplay</p>
+              </div>
+            </div>
+            <div class="art"><img src="assets/ju-ent-hero-1920.webp" alt="Block Merge Puzzle artwork" /></div>
+            <p class="game-copy">Merge blocks, create clean moves, and enjoy a bright puzzle experience with satisfying arcade-style energy.</p>
+            <div class="game-actions">
+              <a class="button button-primary" href="https://play.google.com/store/apps/details?id=com.juent.blockmergepuzzle" target="_blank" rel="noopener">View on Play Store</a>
+            </div>
+          </article>
+
+          <article class="game-card pink">
+            <div class="game-top">
+              <img class="app-icon" src="assets/cozy-color-ropes-icon.png" alt="Cozy Color Ropes app icon" />
+              <div>
+                <h3>Cozy Color Ropes</h3>
+                <p>Relaxing colorful rope puzzle</p>
+              </div>
+            </div>
+            <div class="art"><img src="assets/ju-ent-hero-1920.webp" alt="Cozy Color Ropes artwork" /></div>
+            <p class="game-copy">Untangle a cheerful rope puzzle world with soft visuals, cozy colors, and calm satisfying interactions.</p>
+            <div class="game-actions">
+              <a class="button button-primary" href="https://play.google.com/store/apps/details?id=com.juent.cozycolorropes" target="_blank" rel="noopener">View on Play Store</a>
+            </div>
+          </article>
+        </div>
+
+        <div class="pill-row" aria-label="Game style tags">
+          <span class="pill">Casual puzzle</span>
+          <span class="pill">Minimal gameplay</span>
+          <span class="pill">Colorful visuals</span>
+          <span class="pill">Mobile-first</span>
+          <span class="pill">Family-friendly</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="showcase-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="kicker">Studio showcase</span>
+            <h2 id="showcase-title">A clean home for our puzzle worlds.</h2>
+          </div>
+          <p class="section-desc">Use this website as a simple studio landing page for Play Store visitors, support, privacy policy, and game discovery.</p>
+        </div>
+
+        <div class="showcase">
+          <img src="assets/ju-ent-playstore-header-4096x2304.webp" alt="4096 by 2304 JU ENT Studio Play Store header artwork" />
+          <div class="showcase-caption">
+            <p><strong>JU ENT Studio</strong> creates polished casual game experiences with bright puzzle visuals and lightweight mobile-first design.</p>
+            <a class="button button-secondary" href="assets/ju-ent-playstore-header-4096x2304.webp" target="_blank" rel="noopener">Open header image</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="support" aria-labelledby="support-title">
+      <div class="container about-card">
+        <div class="panel">
+          <span class="kicker">About</span>
+          <h2 id="support-title">Built for quick fun and polished play.</h2>
+          <p>JU ENT Studio is focused on casual puzzle games with approachable design, readable visuals, and satisfying gameplay moments. Visit our Google Play developer page to see all available games.</p>
+          <div class="hero-actions" style="margin: 26px 0 0;">
+            <a class="button button-primary" href="https://play.google.com/store/apps/dev?id=6657733121178173910" target="_blank" rel="noopener">Visit Play Store</a>
+            <a class="button button-secondary" href="mailto:app.parasrathod@gmail.com">Contact support</a>
+          </div>
+        </div>
+
+        <aside class="panel contact-stack" aria-label="Support and legal links">
+          <div class="contact-item">
+            <span>Support email</span>
+            <strong><a href="mailto:app.parasrathod@gmail.com">app.parasrathod@gmail.com</a></strong>
+          </div>
+          <div class="contact-item">
+            <span>Privacy policy</span>
+            <strong><a href="https://rathod-paras.github.io/privacypolicy/" target="_blank" rel="noopener">View privacy policy</a></strong>
+          </div>
+          <div class="contact-item">
+            <span>Developer profile</span>
+            <strong><a href="https://play.google.com/store/apps/dev?id=6657733121178173910" target="_blank" rel="noopener">JU ENT Studio on Google Play</a></strong>
+          </div>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="assets/ju-ent-logo-512.webp" alt="JU ENT Studio logo" />
+        <div>
+          <strong>JU ENT Studio</strong>
+          <span>© 2026 JU ENT Studio. Casual puzzle games for Android.</span>
+        </div>
+      </div>
+      <div class="footer-links">
+        <a href="https://rathod-paras.github.io/privacypolicy/" target="_blank" rel="noopener">Privacy Policy</a>
+        <a href="mailto:app.parasrathod@gmail.com">Support</a>
+        <a href="https://play.google.com/store/apps/dev?id=6657733121178173910" target="_blank" rel="noopener">Visit Store</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    const toggle = document.querySelector('.menu-toggle');
+    const closeMenu = () => {
+      nav.dataset.open = 'false';
+      toggle.setAttribute('aria-expanded', 'false');
+    };
+
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.dataset.open === 'true';
+      nav.dataset.open = String(!isOpen);
+      toggle.setAttribute('aria-expanded', String(!isOpen));
+    });
+
+    document.querySelectorAll('.nav-links a').forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+  </script>
+</body>
+</html>
